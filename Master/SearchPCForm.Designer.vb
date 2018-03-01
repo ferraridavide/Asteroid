@@ -23,6 +23,7 @@ Partial Class SearchPCForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SearchPCForm))
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -229,9 +230,11 @@ Partial Class SearchPCForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
+        Me.ListView1.LargeImageList = Me.ImageList1
         Me.ListView1.Location = New System.Drawing.Point(225, 12)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(496, 285)
+        Me.ListView1.SmallImageList = Me.ImageList1
         Me.ListView1.TabIndex = 3
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -272,9 +275,10 @@ Partial Class SearchPCForm
         '
         'ImageList1
         '
-        Me.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
-        Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "bullet_black.png")
+        Me.ImageList1.Images.SetKeyName(1, "bullet_blue.png")
         '
         'SearchPCForm
         '

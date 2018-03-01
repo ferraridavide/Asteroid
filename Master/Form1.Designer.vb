@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.PC_Name = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.IP_Address = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -40,6 +41,7 @@ Partial Class Form1
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.ContextMenuStrip1.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -49,9 +51,11 @@ Partial Class Form1
         '
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.PC_Name, Me.IP_Address})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView1.LargeImageList = Me.ImageList1
         Me.ListView1.Location = New System.Drawing.Point(0, 0)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(910, 291)
+        Me.ListView1.SmallImageList = Me.ImageList1
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Tile
@@ -127,9 +131,11 @@ Partial Class Form1
         '
         Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3})
         Me.ListView2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView2.LargeImageList = Me.ImageList2
         Me.ListView2.Location = New System.Drawing.Point(0, 0)
         Me.ListView2.Name = "ListView2"
         Me.ListView2.Size = New System.Drawing.Size(910, 107)
+        Me.ListView2.SmallImageList = Me.ImageList2
         Me.ListView2.TabIndex = 0
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.Details
@@ -151,15 +157,18 @@ Partial Class Form1
         '
         'ImageList1
         '
-        Me.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
-        Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "laptop_off.png")
+        Me.ImageList1.Images.SetKeyName(1, "laptop_on.png")
         '
         'ImageList2
         '
-        Me.ImageList2.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
-        Me.ImageList2.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageList2.ImageStream = CType(resources.GetObject("ImageList2.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList2.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList2.Images.SetKeyName(0, "bullet_black.png")
+        Me.ImageList2.Images.SetKeyName(1, "bullet_blue.png")
+        Me.ImageList2.Images.SetKeyName(2, "bullet_red.png")
         '
         'Form1
         '
@@ -173,6 +182,7 @@ Partial Class Form1
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
 

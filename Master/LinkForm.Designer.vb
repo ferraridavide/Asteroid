@@ -23,9 +23,10 @@ Partial Class LinkForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Machine info")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Server settings", -2, -2)
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Plugins")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Machine info")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Server settings")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Plugins")
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(LinkForm))
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
@@ -33,6 +34,7 @@ Partial Class LinkForm
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.StatusStrip1.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -42,21 +44,25 @@ Partial Class LinkForm
         '
         Me.TreeView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TreeView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TreeView1.ImageIndex = 0
+        Me.TreeView1.ImageList = Me.ImageList1
+        Me.TreeView1.ItemHeight = 24
         Me.TreeView1.Location = New System.Drawing.Point(0, 0)
         Me.TreeView1.Name = "TreeView1"
-        TreeNode4.ImageKey = "server_information.png"
-        TreeNode4.Name = "Node0"
-        TreeNode4.SelectedImageKey = "server_information.png"
-        TreeNode4.Text = "Machine info"
-        TreeNode5.ImageIndex = -2
-        TreeNode5.Name = "Node3"
-        TreeNode5.SelectedImageIndex = -2
-        TreeNode5.Text = "Server settings"
-        TreeNode6.ImageKey = "plugin.png"
-        TreeNode6.Name = "Node4"
-        TreeNode6.SelectedImageKey = "plugin.png"
-        TreeNode6.Text = "Plugins"
-        Me.TreeView1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode4, TreeNode5, TreeNode6})
+        TreeNode1.ImageKey = "server_information.png"
+        TreeNode1.Name = "Node0"
+        TreeNode1.SelectedImageKey = "server_information.png"
+        TreeNode1.Text = "Machine info"
+        TreeNode2.ImageKey = "setting_tools.png"
+        TreeNode2.Name = "Node3"
+        TreeNode2.SelectedImageKey = "setting_tools.png"
+        TreeNode2.Text = "Server settings"
+        TreeNode3.ImageKey = "plugin.png"
+        TreeNode3.Name = "Node4"
+        TreeNode3.SelectedImageKey = "plugin.png"
+        TreeNode3.Text = "Plugins"
+        Me.TreeView1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3})
+        Me.TreeView1.SelectedImageIndex = 0
         Me.TreeView1.Size = New System.Drawing.Size(150, 282)
         Me.TreeView1.TabIndex = 0
         '
@@ -104,9 +110,11 @@ Partial Class LinkForm
         '
         'ImageList1
         '
-        Me.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit
-        Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "server_information.png")
+        Me.ImageList1.Images.SetKeyName(1, "setting_tools.png")
+        Me.ImageList1.Images.SetKeyName(2, "plugin.png")
         '
         'LinkForm
         '
@@ -122,6 +130,7 @@ Partial Class LinkForm
         Me.StatusStrip1.PerformLayout()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
