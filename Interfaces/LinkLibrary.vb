@@ -87,7 +87,6 @@ Public Class Link
         Try
             Dim bytesRead As Integer = DataStream.EndRead(ar)
             If bytesRead > 0 Then
-
                 If XMLLibrary.TryObjects(Encoding.ASCII.GetString(Buffer, 0, bytesRead), {GetType(Machine)}) IsNot Nothing Then
                     RemoteMachine = XMLLibrary.ToObject(Encoding.ASCII.GetString(Buffer, 0, bytesRead), GetType(Machine))
                 Else

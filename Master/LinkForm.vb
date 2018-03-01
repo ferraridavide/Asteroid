@@ -46,7 +46,9 @@ Public Class LinkForm
             Panel1.Controls.Clear()
         Else
             Panel1.Controls.Clear()
+
             Dim UI As UserControl = e.Node.Tag
+            UI.Tag = PCLink
             Panel1.Controls.Add(UI)
             UI.Dock = DockStyle.Fill
             Panel1.ResumeLayout()

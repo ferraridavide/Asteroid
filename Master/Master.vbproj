@@ -127,6 +127,9 @@
     <EmbeddedResource Include="LinkForm.resx">
       <DependentUpon>LinkForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LinkForm_UI\MachineInfo.resx">
+      <DependentUpon>MachineInfo.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

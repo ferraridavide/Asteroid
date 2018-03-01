@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports System.Management
 Imports System.Windows.Forms
 
 
@@ -37,12 +38,44 @@ End Interface
 
 Public Class Machine
     Public Property LoggedUser As String
+    Public Property ProcessorName As String
+    Public Property VideoControllerName As String
+    Public Property MoboInfo As String
+    Public Property OSName As String
+    Public Property OSArchitecture As String
+    Public Property DiskDriveInfo As String
+    Public Property VideoResolution As String
+    Public Property ProcessorCoreNumber As String
+    Public Property MachineName As String
+    Public Property RAM As String
     Public Property Plugins As PluginInfo()
     Sub New()
         'Necessario per la serializzazione XML
     End Sub
     Sub New(ByVal LPlugin As PluginInfo())
-        LoggedUser = "Ciao"
+        Using objMgmt As ManagementObject = New ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem").Get()(0)
+            LoggedUser = objMgmt("username").ToString()
+        End Using
+        Using objMgmt As ManagementObject = New ManagementObjectSearcher("SELECT * FROM Win32_Processor").Get()(0)
+            ProcessorName = objMgmt("name").ToString()
+        End Using
+        Using objMgmt As ManagementObject = New ManagementObjectSearcher("SELECT * FROM Win32_VideoController").Get()(0)
+            VideoControllerName = objMgmt("caption").ToString()
+        End Using
+        Using objMgmt As ManagementObject = New ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard").Get()(0)
+            MoboInfo = objMgmt("manufacturer").ToString() & " - " & objMgmt("product").ToString()
+        End Using
+        Using objMgmt As ManagementObject = New ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get()(0)
+            OSName = objMgmt("caption").ToString()
+            OSArchitecture = objMgmt("osarchitecture").ToString()
+        End Using
+        For Each objMgmt As ManagementObject In New ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive").Get()
+            DiskDriveInfo = DiskDriveInfo & objMgmt("caption").ToString() & " | " & Utils.BytesToString(Val(objMgmt("size").ToString())) & "&"
+        Next
+        VideoResolution = Screen.PrimaryScreen.Bounds.Width & "x" & Screen.PrimaryScreen.Bounds.Height
+        RAM = Utils.BytesToString(My.Computer.Info.TotalPhysicalMemory)
+        MachineName = Environment.MachineName
+        ProcessorCoreNumber = Environment.ProcessorCount
         Plugins = LPlugin
     End Sub
 End Class
