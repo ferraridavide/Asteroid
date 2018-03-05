@@ -8,10 +8,11 @@ Public Class Form1
     Dim Listener As New TcpListener(IPAddress.Any, 11000)
     Dim LPlugin As New List(Of IServerPlugin)
     Dim LClient As New List(Of Link)
+    Dim MyMachine As Machine
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Try
-            Dim files() As String = Directory.GetFiles("\\DESKTOP-0FNU41O\Users\Davide\Desktop\Plugin\HostApplication\Plugin1\bin\Debug", "*.dll", SearchOption.TopDirectoryOnly)
+            Dim files() As String = Directory.GetFiles("C:\Users\Davide\Desktop\Plugin dlls", "*.dll", SearchOption.TopDirectoryOnly)
             For Each FileName As String In files
                 Dim asm As Assembly = Assembly.LoadFile(FileName)
                 Dim myType As Type = asm.GetType(asm.GetName.Name + ".ServerPlugin")
@@ -34,6 +35,11 @@ Public Class Form1
         Listener.Start()
         Listener.BeginAcceptTcpClient(New AsyncCallback(AddressOf AcceptCallback), Listener)
         RichTextBox1.AppendText("Listening on 11000..." & vbNewLine)
+        Dim LPluginInfo As New List(Of PluginInfo)
+        For Each Plugin As IServerPlugin In LPlugin
+            LPluginInfo.Add(New PluginInfo With {.Name = Plugin.Name, .Version = Plugin.Version})
+        Next
+        MyMachine = New Machine(LPluginInfo.ToArray)
     End Sub
     Public Sub AcceptCallback(ByVal ar As IAsyncResult)
         Dim Client As New Link(Listener.EndAcceptTcpClient(ar))
@@ -43,11 +49,8 @@ Public Class Form1
         ListBox1.Items.Add(Client)
         LClient.Add(Client)
         RichTextBox1.AppendText(Client.RemoteEndPoint.Address.ToString & " - " & "Connection Established" & vbNewLine)
-        Dim LPluginInfo As New List(Of PluginInfo)
-        For Each Plugin As IServerPlugin In LPlugin
-            LPluginInfo.Add(New PluginInfo With {.Name = Plugin.Name, .Version = Plugin.Version})
-        Next
-        Client.Send(XMLLibrary.ToText(New Machine(LPluginInfo.ToArray)))
+
+        Client.Send(XMLLibrary.ToText(MyMachine))
         RichTextBox1.AppendText(Client.RemoteEndPoint.Address.ToString & " - " & "Sent MachineInfo" & vbNewLine)
     End Sub
     Private Sub FailedConnection(ByVal sender As Link, ByVal ex As Exception)

@@ -27,6 +27,7 @@ Partial Class Form1
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.PC_Name = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.IP_Address = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.GroupToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SearchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -38,7 +39,6 @@ Partial Class Form1
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.ImageList2 = New System.Windows.Forms.ImageList(Me.components)
         Me.ContextMenuStrip1.SuspendLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -67,6 +67,13 @@ Partial Class Form1
         'IP_Address
         '
         Me.IP_Address.Text = "IP Address"
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "laptop_off.png")
+        Me.ImageList1.Images.SetKeyName(1, "laptop_on.png")
         '
         'ContextMenuStrip1
         '
@@ -154,13 +161,6 @@ Partial Class Form1
         '
         Me.ColumnHeader3.Text = "Message"
         Me.ColumnHeader3.Width = 500
-        '
-        'ImageList1
-        '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageList1.Images.SetKeyName(0, "laptop_off.png")
-        Me.ImageList1.Images.SetKeyName(1, "laptop_on.png")
         '
         'ImageList2
         '

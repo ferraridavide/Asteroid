@@ -3,10 +3,12 @@ Imports Interfaces
 
 Public Class LinkForm
     Public PCLink As Link
+    Public LPCLink As New List(Of Link)
     Private Sub LinkForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LPCLink.Add(PCLink)
         Dim LList As New List(Of List(Of String))
         Dim LLocalPlugin As New List(Of String)
-        For Each Plugin As IClientPlugin In Form1.LPlugin
+        For Each Plugin As IClientPlugin In PCLink.LClientPlugin 'Form1.LPlugin
             LLocalPlugin.Add((Plugin.Name & Plugin.Version).GetHashCode)
         Next
         LList.Add(LLocalPlugin)
@@ -20,13 +22,17 @@ Public Class LinkForm
             x.AddRange(LList(i + 1).Intersect(LList(i)))
             LList(i + 1) = x
         Next
-        For Each Plugin As IClientPlugin In Form1.LPlugin
+        For Each Plugin As IClientPlugin In PCLink.LClientPlugin 'Form1.LPlugin
 
             For Each l In LList(LList.Count - 1)
                 If l = (Plugin.Name & Plugin.Version).GetHashCode Then
+                    If Plugin.Icon Is Nothing Then
+                        ImageList1.Images.Add(My.Resources.Help_icon)
+                    Else
+                        ImageList1.Images.Add(Plugin.Icon)
+                    End If
 
-                    ImageList1.Images.Add(Plugin.Icon)
-                    TreeView1.Nodes.Add(New TreeNode(Plugin.Name, ImageList1.Images.Count - 1, ImageList1.Images.Count - 1) With {.Tag = Plugin.UI})
+                    TreeView1.Nodes.Add(New TreeNode(Plugin.Name, ImageList1.Images.Count - 1, ImageList1.Images.Count - 1) With {.Tag = Plugin.UI(LPCLink)})
 
 
                 End If
@@ -58,7 +64,6 @@ Public Class LinkForm
     End Sub
 
     Private Sub IncomingData(ByVal sender As Link, ByVal data As String)
-        MsgBox("incoming")
 
     End Sub
 
@@ -75,5 +80,9 @@ Public Class LinkForm
         RemoveHandler PCLink.Update, AddressOf LinkUpdate
         RemoveHandler PCLink.ConnectionFailed, AddressOf ConnectionFailed
         RemoveHandler PCLink.IncomingData, AddressOf IncomingData
+    End Sub
+
+    Private Sub LinkForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        Panel1.Controls.Clear()
     End Sub
 End Class

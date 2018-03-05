@@ -60,7 +60,7 @@ Public Class SearchPCForm
                 If PCItem.SubItems(1).Text = PCAddress.ToString Then
                     PCItem.SubItems(2).Text = "..."
                     TryCast(PCItem.Tag, Link).Close()
-                    Dim PCNewLink As New Link(New IPEndPoint(PCAddress, 11000))
+                    Dim PCNewLink As New Link(New IPEndPoint(PCAddress, 11000), Form1.LPluginTypes)
                     AddHandler PCNewLink.ConnectionFailed, AddressOf ConnectionFailed
                     AddHandler PCNewLink.Update, AddressOf UpdateLink
                     PCItem.Tag = PCNewLink
@@ -72,7 +72,7 @@ Public Class SearchPCForm
             NewPCItem.ImageIndex = 0
             NewPCItem.SubItems.Add(PCAddress.ToString)
             NewPCItem.SubItems.Add("...")
-            Dim PCLink As New Link(New IPEndPoint(PCAddress, 11000))
+            Dim PCLink As New Link(New IPEndPoint(PCAddress, 11000), Form1.LPluginTypes)
             AddHandler PCLink.ConnectionFailed, AddressOf ConnectionFailed
             AddHandler PCLink.Update, AddressOf UpdateLink
             NewPCItem.Tag = PCLink

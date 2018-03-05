@@ -26,12 +26,15 @@ Public Class Link
     Private Client As New TcpClient
     Private BufferSize As Integer
     Private Buffer As Byte()
-
+    Public LClientPlugin As New List(Of IClientPlugin)
     Public ReadOnly LinkType As LinkType
     Public LinkStatus As LinkStatus = LinkStatus.Uninitialized
     Public ReadOnly RemoteEndPoint As IPEndPoint
     Public RemoteMachine As Machine
 
+    Public Sub New()
+
+    End Sub
     Public Sub New(ByVal PenFriend As TcpClient)
         Try
 
@@ -52,15 +55,37 @@ Public Class Link
         End Try
 
     End Sub
-    Public Sub New(ByVal EndPoint As IPEndPoint)
+    Public Sub SendPluginData(ByVal sender As IClientPlugin, ByVal data As String, ByVal destination As List(Of Link))
+        For Each PCLink As Link In destination
+            PCLink.Send(XMLLibrary.ToText(New PluginPacket With {.Name = sender.Name, .Version = sender.Version, .Data = data}))
+        Next
+    End Sub
+    Public Sub New(ByVal EndPoint As IPEndPoint, LPluginType As List(Of Type))
+
+        For Each pluginType As Type In LPluginType
+            Dim plugin As IClientPlugin = CType(Activator.CreateInstance(pluginType), IClientPlugin)
+            Try
+
+                plugin.ClientStarted()
+                AddHandler plugin.SendData, AddressOf SendPluginData
+                LClientPlugin.Add(plugin)
+            Catch ex As Exception
+                MsgBox("FAIL - " & ex.Message)
+            End Try
+
+
+
+        Next
+
         Try
+
             LinkType = LinkType.ToServer
             RemoteEndPoint = EndPoint
             Client.BeginConnect(EndPoint.Address, EndPoint.Port, New AsyncCallback(AddressOf ConnectCallback), Client)
             LinkStatus = LinkStatus.Connecting
             'Try
         Catch ex As Exception
-                Fail(ex)
+            Fail(ex)
         End Try
 
     End Sub
@@ -75,7 +100,7 @@ Public Class Link
 
             DataStream.BeginRead(Buffer, 0, BufferSize, New AsyncCallback(AddressOf ReadCallback), Nothing)
             LinkStatus = LinkStatus.Running
-        RaiseEvent Update(Me, LinkStatus)
+            RaiseEvent Update(Me, LinkStatus)
             'Try
 
         Catch ex As Exception

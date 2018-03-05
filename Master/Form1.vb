@@ -8,6 +8,9 @@ Imports Interfaces
 
 
 Public Class Form1
+    Public LPluginTypes As New List(Of Type)
+
+
     Public LPlugin As New List(Of IClientPlugin)
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseUp
         If e.Button = MouseButtons.Right Then
@@ -82,20 +85,21 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
 
-        Dim files() As String = Directory.GetFiles("\\DESKTOP-0FNU41O\Users\Davide\Desktop\Plugin\HostApplication\Plugin1\bin\Debug", "*.dll", SearchOption.TopDirectoryOnly)
+        Dim files() As String = Directory.GetFiles("C:\Users\Davide\Desktop\Plugin dlls", "*.dll", SearchOption.TopDirectoryOnly)
         For Each FileName As String In files
             Dim asm As Assembly = Assembly.LoadFile(FileName)
             Dim myType As Type = asm.GetType(asm.GetName.Name + ".ClientPlugin")
             If GetType(IClientPlugin).IsAssignableFrom(myType) Then
-                Dim plugin As IClientPlugin = CType(Activator.CreateInstance(myType), IClientPlugin)
-                Try
+                LPluginTypes.Add(myType)
+                'Dim plugin As IClientPlugin = CType(Activator.CreateInstance(myType), IClientPlugin)
+                'Try
 
-                    plugin.ClientStarted()
-                    AddHandler plugin.SendData, AddressOf SendPluginData
-                    LPlugin.Add(plugin)
-                Catch ex As Exception
+                'plugin.ClientStarted()
+                'AddHandler plugin.SendData, AddressOf SendPluginData
+                'LPlugin.Add(plugin)
+                'Catch ex As Exception
 
-                End Try
+                'End Try
             End If
         Next
         Try
@@ -107,16 +111,16 @@ Public Class Form1
 
 
 
-        Dim item As New ListViewItem
-        item.Text = Dns.GetHostEntry(IPAddress.Parse("192.168.1.106")).HostName
-        item.SubItems.Add("192.168.1.106")
-        Dim PCLink As New Link(New IPEndPoint(IPAddress.Parse("192.168.1.106"), 11000))
-        item.Tag = PCLink
-        If PCLink.LinkStatus = LinkStatus.Running Then item.ImageIndex = 1 Else item.ImageIndex = 0
-        AddHandler PCLink.Update, AddressOf LinkUpdate
-        AddHandler PCLink.ConnectionFailed, AddressOf ConnectionFailed
-        AddHandler PCLink.IncomingData, AddressOf IncomingData
-        AddItemToListView(item)
+        'Dim item As New ListViewItem
+        'item.Text = Dns.GetHostEntry(IPAddress.Parse("192.168.1.102")).HostName
+        'item.SubItems.Add("192.168.1.102")
+        'Dim PCLink As New Link(New IPEndPoint(IPAddress.Parse("192.168.1.102"), 11000), LPluginTypes)
+        'item.Tag = PCLink
+        'If PCLink.LinkStatus = LinkStatus.Running Then item.ImageIndex = 1 Else item.ImageIndex = 0
+        'AddHandler PCLink.Update, AddressOf LinkUpdate
+        'AddHandler PCLink.ConnectionFailed, AddressOf ConnectionFailed
+        'AddHandler PCLink.IncomingData, AddressOf IncomingData
+        'AddItemToListView(item)
     End Sub
     Private Sub Form1_FormClosing(sender As Object, e As CancelEventArgs) Handles Me.FormClosing
         Dim GroupArrangementList As New List(Of GroupArrangementStruct)
@@ -223,7 +227,7 @@ Public Class Form1
     Private Sub RetryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RetryToolStripMenuItem.Click
         For Each SelectedPC As ListViewItem In ListView1.SelectedItems
             Dim REP As IPEndPoint = DirectCast(SelectedPC.Tag, Link).RemoteEndPoint
-            Dim connection As New Link(REP)
+            Dim connection As New Link(REP, LPluginTypes)
             AddHandler connection.Update, AddressOf LinkUpdate
             AddHandler connection.ConnectionFailed, AddressOf ConnectionFailed
             AddHandler connection.IncomingData, AddressOf IncomingData
@@ -233,8 +237,8 @@ Public Class Form1
     End Sub
     Private Sub IncomingData(ByVal sender As Link, ByVal data As String)
         Dim Packet As New PluginPacket
-        Packet = XMLLibrary.ToObject(Data, GetType(PluginPacket))
-        For Each Plugin As IClientPlugin In LPlugin
+        Packet = XMLLibrary.ToObject(data, GetType(PluginPacket))
+        For Each Plugin As IClientPlugin In sender.LClientPlugin
             If Packet.Name = Plugin.Name And Plugin.Version = Packet.Version Then
                 Plugin.IncomingData(sender, Packet.Data)
             End If
@@ -265,14 +269,21 @@ Public Class Form1
     Public Sub Report(ByVal sender As Link, ByVal message As String, ByVal color As Integer)
         ListView2.Items.Insert(0, New ListViewItem({Dns.GetHostEntry(sender.RemoteEndPoint.Address).HostName.ToString, sender.RemoteEndPoint.Address.ToString, message}, color))
         ListView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+
     End Sub
 
 
 
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
+
         Dim LinkManager As New LinkForm
+
         LinkManager.PCLink = ListView1.SelectedItems(0).Tag
         LinkManager.Show()
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+
     End Sub
 End Class
 
